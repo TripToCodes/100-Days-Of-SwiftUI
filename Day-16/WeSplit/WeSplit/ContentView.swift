@@ -1,32 +1,49 @@
-//
-//  ContentView.swift
-//  WeSplit
-//
-//  Created by Somi Jeon on 2024-03-01.
-//
-
 import SwiftUI
 
 struct ContentView: View {
-    let students = ["Harry", "Hermione", "Ron"]
-    @State private var selectedStudent = "Harry" // @State property wrapper is used to create a two-way binding
+    let tipPercentages: [Int] = [15, 18, 20, 25, 0]
+    @State private var selectedTip: Int = 18 // @State property wrapper is used to create a two-way binding
+    @State private var checkAmount: Double = 0.0
+    @State private var numberOfPeople: Int = 2
+    @State private var totalAmount: Double = 0.0
+    
+    var splitbill: Double {
+        return checkAmount / Double(numberOfPeople)
+    }
     
     var body: some View {
-        NavigationStack {
+        NavigationView {
             Form {
-                Picker("Select your student", selection: $selectedStudent) {
-                    ForEach(students, id: \.self) { // id: \.self is used to identify each student uniquely
-                        Text($0) // $0 is a shorthand for the current item in the array
-                    }
+                Section {
+                    TextField("Amount", value: $checkAmount, format: .currency(code: Locale.current.currency?.identifier ?? "CAD"))
+                        .keyboardType(.decimalPad)
                 }
-//                TextField("Enter your name", text: $name) // $name is a two-way(read & write) binding
-//                Text("Hello, \(name)!")
+
+                Section(header: Text("Number of people")) {
+                    TextField("Number of people", value: $numberOfPeople, format: .number)
+
+                }
+                
+                Section(header: Text("Tip Percentage")) {
+                    Picker("Tips", selection: $selectedTip) {
+                        ForEach(tipPercentages, id: \.self) { tip in
+                            Text("\(tip)%")
+                        }
+                    }
+                    .pickerStyle(SegmentedPickerStyle())
+                }
+                
+                Section(header: Text("Total per person")) {
+                    Text(String(format: "%.2f", splitbill + (splitbill * Double(selectedTip) / 100)))
+                }
             }
+            .navigationBarTitle("WeSplit")
         }
-     
     }
 }
 
-#Preview {
-    ContentView()
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
+    }
 }
