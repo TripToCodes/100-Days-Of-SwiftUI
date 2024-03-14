@@ -10,30 +10,48 @@ struct ContentView: View {
     @State private var numberOfQuestions = 0
     
     var body: some View {
-        VStack(spacing: 20) {
-            VStack {
-                Text("Tap the flag of")
-                Text(countries[correctAnswer])
-            }
-            .padding(20)
-            .font(.title)
+        ZStack {
+            RadialGradient(stops: [
+                .init(color: Color(red: 1, green: 0.6, blue: 0.5), location: 0.3),
+                .init(color: Color(red: 1, green: 0.8, blue: 0.4), location: 0.3)
+            ], center: .top, startRadius: 200, endRadius: 700)
+            .ignoresSafeArea()
             
-            ForEach(0..<3) { number in
-                Button {
-                    flagTapped(number)
-                } label: {
-                    Image(countries[number])
+            VStack(spacing: 20) {
+                VStack {
+                    Text("Tap the flag of")
+                        .font(.title)
+                    Text(countries[correctAnswer])
+                        .font(.largeTitle.weight(.semibold))
+                    
                 }
+                .padding(20)
+                .font(.title)
+                
+                ForEach(0..<3) { number in
+                    Button {
+                        flagTapped(number)
+                    } label: {
+                        Image(countries[number])
+                            .clipShape(.capsule)
+                            .shadow(radius: 5)
+                    }
+                }
+                Text("Score: \(score)")
+                     .font(.title.bold())
             }
-            Text("Score: \(score)")
-        }
-        .alert(isPresented: $showingScore) {
-            Alert(title: Text(alertTitle), message: Text(alertMessage), dismissButton: .default(Text("Continue")) {
-                askQuestion()
-            })
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 20)
+            .background(.regularMaterial)
+            .clipShape(.rect(cornerRadius: 20))
+            .alert(isPresented: $showingScore) {
+                Alert(title: Text(alertTitle), message: Text(alertMessage), dismissButton: .default(Text("Continue")) {
+                    askQuestion()
+                })
+            }
         }
     }
-
+    
     func flagTapped(_ number: Int) {
         numberOfQuestions += 1
         if number == correctAnswer {
