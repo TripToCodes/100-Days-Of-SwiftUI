@@ -49,7 +49,7 @@ struct ContentView: View {
                     Text("Daily coffee intake")
                         .font(.headline)
                     
-                    Stepper("^[\(coffeeAmount) cup](inflect: true)", value: $coffeeAmount, in: 1...20)
+                    Stepper("^[\(coffeeAmount) cup](inflect: true)", value: $coffeeAmount, in: 1...20) // inflect: true will make it plural when the value is greater than 1. This syntax tells SwiftUI that the word "cup" needs to be inflected to match whatever is in the coffeeAmount variable
                 }
             }
             .navigationTitle("BetterRest")
