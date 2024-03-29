@@ -10,7 +10,7 @@ struct ContentView: View {
     @State private var numberOfQuestions = 0
     @State private var isReady = false
     
-    private enum PlayOption: String, CaseIterable {
+    private enum PlayOption: String, CaseIterable { 
         case rock = "✊"
         case scissors = "✌️"
         case paper = "🖐️"
